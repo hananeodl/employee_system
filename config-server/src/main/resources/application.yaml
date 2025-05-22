@@ -8,7 +8,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/ton-organisation/config-repo
+          uri: https://github.com/hananeodl/ConfigServer/
           default-label: main
           clone-on-start: true
           search-paths: .
