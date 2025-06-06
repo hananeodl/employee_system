@@ -25,5 +25,23 @@ public class PayrollServiceImpl implements PayrollService {
     public List<Payroll> getPayrollByEmployee(Long employeeId) {
         return payrollRepository.findByEmployeeId(employeeId);
     }
+
+    @Override
+    public Payroll updatePayroll(Long id, Payroll updatedPayroll) {
+        Payroll existing = payrollRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Payroll not found"));
+
+        existing.setBaseSalary(updatedPayroll.getBaseSalary());
+        existing.setBonus(updatedPayroll.getBonus());
+        existing.setDeductions(updatedPayroll.getDeductions());
+        existing.setNetSalary(updatedPayroll.getNetSalary());
+
+        return payrollRepository.save(existing);
+    }
+
+    @Override
+    public List<Payroll> getPayrollsByEmployeeId(Long employeeId) {
+        return payrollRepository.findByEmployeeId(employeeId);
+    }
 }
 

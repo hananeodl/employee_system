@@ -1,0 +1,41 @@
+### 1. Ajouter une fiche de paie
+POST http://localhost:8081/api/payroll/
+Content-Type: application/json
+
+{
+  "employeeId": 1,
+  "baseSalary": 3000.0,
+  "bonus": 500.0,
+  "deductions": 200.0,
+  "netSalary": 3300.0,
+  "paymentDate": "2024-05-25"
+}
+
+### 2. Ajouter une autre fiche de paie
+POST http://localhost:8081/api/payrolls
+Content-Type: application/json
+
+{
+  "employeeId": 2,
+  "baseSalary": 4000.0,
+  "bonus": 800.0,
+  "deductions": 300.0,
+  "netSalary": 4500.0,
+  "paymentDate": "2024-05-25"
+}
+
+### 3. Récupérer les fiches de paie de l'employé 1
+GET http://localhost:8081/api/payrolls/employee/1
+
+### 4. Mettre à jour une fiche de paie (par exemple id = 1)
+PUT http://localhost:8081/api/payrolls/1
+Content-Type: application/json
+
+{
+  "employeeId": 1,
+  "baseSalary": 3200.0,
+  "bonus": 600.0,
+  "deductions": 250.0,
+  "netSalary": 3550.0,
+  "paymentDate": "2024-06-01"
+}
