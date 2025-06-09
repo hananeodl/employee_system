@@ -31,7 +31,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/app/sign-in", "/app/sign-up", "/app/refresh-token").permitAll()
+                        .requestMatchers("/app/sign-in", "/app/sign-up", "/app/refresh-token", "/graphql").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

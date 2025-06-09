@@ -65,10 +65,16 @@ public class UserService implements UserDetailsService {
 		return userRepository.findAll();
 	}
 	public User saveUser(User user) {
-		// Ici tu peux ajouter des validations si besoin
-		user.setPassword(passwordEncoder.encode(user.getPassword())); // encoder mot de passe
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		// Optionnel: affecter rôle USER par défaut si null
+		if (user.getRole() == null) {
+			Role role = roleRepository.findByName("ROLE_USER")
+					.orElseThrow(() -> new RuntimeException("Role USER not found"));
+			user.setRole(role);
+		}
 		return userRepository.save(user);
 	}
+
 	// Méthode pour mettre à jour un utilisateur existant
 	public User updateUser(Long id, User updatedUser) {
 		User user = userRepository.findById(id)
@@ -91,5 +97,9 @@ public class UserService implements UserDetailsService {
 		}
 		userRepository.deleteById(id);
 	}
-
+	// Méthode pour récupérer un user par id
+	public User findById(Long id) {
+		return userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+	}
 }
