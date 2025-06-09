@@ -91,7 +91,7 @@ public class AuthController {
         }
     }
 
-    // ✅ Endpoint pour obtenir l'utilisateur actuellement connecté
+    //  Endpoint pour obtenir l'utilisateur actuellement connecté
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -115,7 +115,9 @@ public class AuthController {
         }
 
         try {
-            refreshToken = refreshToken.substring(7);
+            if (refreshToken.startsWith("Bearer ")) {
+                refreshToken = refreshToken.substring(7);
+            }
             SecretKey key = Keys.hmacShaKeyFor(SecurityConstants.JWT_KEY.getBytes());
 
             Claims claims = Jwts.parserBuilder()

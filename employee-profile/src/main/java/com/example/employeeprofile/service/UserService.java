@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -57,6 +59,37 @@ public class UserService implements UserDetailsService {
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+	}
+	// Méthode pour récupérer tous les utilisateurs (à ajouter)
+	public List<User> findAllUsers() {
+		return userRepository.findAll();
+	}
+	public User saveUser(User user) {
+		// Ici tu peux ajouter des validations si besoin
+		user.setPassword(passwordEncoder.encode(user.getPassword())); // encoder mot de passe
+		return userRepository.save(user);
+	}
+	// Méthode pour mettre à jour un utilisateur existant
+	public User updateUser(Long id, User updatedUser) {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("User not found with id " + id));
+
+		user.setUsername(updatedUser.getUsername());
+		user.setEmail(updatedUser.getEmail());
+		if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+			user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+		}
+		user.setRole(updatedUser.getRole());
+
+		return userRepository.save(user);
+	}
+
+	// Méthode pour supprimer un utilisateur
+	public void deleteUser(Long id) {
+		if (!userRepository.existsById(id)) {
+			throw new RuntimeException("User not found with id " + id);
+		}
+		userRepository.deleteById(id);
 	}
 
 }
