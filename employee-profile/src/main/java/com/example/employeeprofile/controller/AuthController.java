@@ -110,7 +110,7 @@ public class AuthController {
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
         String refreshToken = request.get("refreshToken");
-        if (refreshToken == null || !refreshToken.startsWith("Bearer ")) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
             return ResponseEntity.status(401).body(Map.of("error", "Refresh token is missing or invalid"));
         }
 
