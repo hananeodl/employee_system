@@ -1,15 +1,38 @@
 server:
-  port: 8081
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:localhost.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    key-alias: 1
+    trust-store: classpath:truststore.p12
+    trust-store-password: changeit
+    trust-store-type: PKCS12
+  http2:
+    enabled: true
+  tls:
+    enabled: true
 
+server.http:
+  port: 8081
 spring:
   application:
     name: gateway
   config:
     import: optional:configserver:http://localhost:8888
+
+
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: https://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
   instance:
     prefer-ip-address: true
-
+    secure-port-enabled: true
+    secure-port: 8443
+    status-page-url: https://localhost:8443/actuator/info
+    health-check-url: https://localhost:8443/actuator/health
+    home-page-url: https://localhost:8443/
