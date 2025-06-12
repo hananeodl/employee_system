@@ -11,7 +11,8 @@
 	<groupId>ucd.fs</groupId>
 	<artifactId>Employee_system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Employee_system</name>
+    <packaging>pom</packaging>
+    <name>Employee_system</name>
 	<description>Employee_system</description>
 	<url/>
 	<licenses>
@@ -20,7 +21,10 @@
 	<developers>
 		<developer/>
 	</developers>
-	<scm>
+    <modules>
+        <module>performance-review</module>
+    </modules>
+    <scm>
 		<connection/>
 		<developerConnection/>
 		<tag/>
