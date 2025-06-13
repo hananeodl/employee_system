@@ -23,6 +23,7 @@
 	</developers>
     <modules>
         <module>performance-review</module>
+        <module>graphql-api</module>
     </modules>
     <scm>
 		<connection/>

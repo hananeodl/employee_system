@@ -1,0 +1,41 @@
+type Query {
+    getUser(id: ID!): User
+    getPayrolls(employeeId: ID!): [Payroll]
+    getAbsences(employeeId: ID!): [Absence]
+    getPerformanceReviews(employeeId: ID!): [PerformanceReview]
+}
+
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    password: String!
+    role: String!
+}
+
+type Payroll {
+    id: ID!
+    employeeId: ID!
+    baseSalary: Float
+    bonus: Float
+    deductions: Float
+    netSalary: Float
+    paymentDate: String
+}
+
+type Absence {
+    id: ID!
+    employeeId: ID!
+    startDate: String
+    endDate: String
+    reason: String
+    status: String
+}
+
+type PerformanceReview {
+    id: ID!
+    employeeId: ID!
+    score: Int
+    comments: String
+    reviewDate: String
+}
