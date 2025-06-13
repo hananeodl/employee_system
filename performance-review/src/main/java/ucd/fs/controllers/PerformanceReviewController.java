@@ -2,8 +2,10 @@ package ucd.fs.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ucd.fs.model.PerformanceReview;
+import ucd.fs.security.BruteForceProtectionService;
 import ucd.fs.service.PerformanceReviewService;
 
 import java.util.List;
@@ -15,9 +17,25 @@ public class PerformanceReviewController {
     @Autowired
     private PerformanceReviewService service;
 
+    @Autowired
+    private BruteForceProtectionService bruteForceProtectionService;
+
     @PostMapping
-    public ResponseEntity<PerformanceReview> createReview(@RequestBody PerformanceReview review) {
-        return ResponseEntity.ok(service.saveReview(review));
+    public ResponseEntity<?> createReview(@RequestBody PerformanceReview review, Authentication authentication) {
+        String username = authentication.getName();
+
+        if (bruteForceProtectionService.isBlocked(username)) {
+            return ResponseEntity.status(429).body("Trop de tentatives. Réessayez plus tard.");
+        }
+
+        try {
+            PerformanceReview savedReview = service.saveReview(review);
+            bruteForceProtectionService.loginSucceeded(username);
+            return ResponseEntity.ok(savedReview);
+        } catch (Exception e) {
+            bruteForceProtectionService.loginFailed(username);
+            return ResponseEntity.badRequest().body("Erreur lors de la création de la review : " + e.getMessage());
+        }
     }
 
     @GetMapping
@@ -43,4 +61,3 @@ public class PerformanceReviewController {
         return ResponseEntity.noContent().build();
     }
 }
-
