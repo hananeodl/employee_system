@@ -64,8 +64,9 @@ public class JwtValidationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // Ne pas filtrer pour le endpoint sign-in
-        return request.getServletPath().equals("/app/sign-in");
+
+        String path = request.getServletPath();
+        return path.equals("/app/sign-in") || path.equals("/app/sign-up") || path.equals("/app/refresh-token") || path.equals("/graphql");
     }
 }
 

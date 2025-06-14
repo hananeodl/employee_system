@@ -12,10 +12,14 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserGraphQLController {
 
     private final UserService userService;
+
+    public UserGraphQLController(UserService userService) {
+        this.userService = userService;
+    }
 
     @QueryMapping
     public List<User> users() {

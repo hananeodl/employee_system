@@ -1,8 +1,5 @@
-package com.example.employeeprofile.controller;
+package ucd.fs.absencemanagement.ws.dto;
 
-import lombok.Data;
-
-@Data
 public class AuthRequest {
     private String username;
     private String password;

@@ -1,0 +1,8 @@
+### Authentification
+POST https://localhost:8083/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "secret123"
+}

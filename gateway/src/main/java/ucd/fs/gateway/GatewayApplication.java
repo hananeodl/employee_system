@@ -13,20 +13,6 @@ public class GatewayApplication {
     }
 }
 
-//Le Gateway va :
-//
-//intercepter toutes les requêtes
-//
-//valider le JWT
-//
-//propager les infos de l’utilisateur vers les microservices
 
-// Fasse office de point d’entrée sécurisé avec HTTPS
-//
-// Gère l’authentification avec JWT
-//
-// Redirige HTTP vers HTTPS
-//
-//Fasse le routage vers les microservices enregistrés dans Eureka
 
 

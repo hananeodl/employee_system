@@ -9,41 +9,31 @@ import ucd.fs.absencemanagement.service.facade.AbsenceService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/absences")
+@RequestMapping("/api/absences/")
 public class AbsenceController {
     @Autowired
     private AbsenceService absenceService;
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Absence> createAbsence(@RequestBody Absence absence) {
         return ResponseEntity.ok(absenceService.createAbsence(absence));
     }
 
-    @GetMapping
+    @GetMapping("")
     public List<Absence> getAllAbsences() {
         return absenceService.getAllAbsences();
     }
 
-    @PutMapping("/{id}/approve")
+    @PutMapping("{id}/approve")
     public ResponseEntity<Absence> approveAbsence(@PathVariable Long id) {
         return ResponseEntity.ok(absenceService.approveAbsence(id));
     }
 
-    @GetMapping("/employee/{employeeId}")
+    @GetMapping("employee/{employeeId}")
     public ResponseEntity<List<Absence>> getAbsencesByEmployee(@PathVariable Long employeeId) {
         return ResponseEntity.ok(absenceService.getAbsencesByEmployeeId(employeeId));
     }
 }
 
-//Service 2 : absence-management-service
-//Fonction : gérer les demandes de congés et les absences.
-//
-//
-//GET /api/absences → liste des absences.
-//
-//        POST /api/absences → demander un congé.
-//
-//        PUT /api/absences/{id}/approve → valider une demande.
-//
-//        GET /api/absences/employee/{employeeId} → absences d’un employé.
+
 

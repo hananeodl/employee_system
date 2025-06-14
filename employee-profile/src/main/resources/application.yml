@@ -1,9 +1,11 @@
 spring:
   application:
-    name: employee_profile
+    name: employee-profile
   config:
     import: "optional:configserver:http://localhost:8888"
-
+  cloud:
+    config:
+      name: employee-profile
   profiles:
     active: dev
 
@@ -13,10 +15,15 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: https://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
 graphiql:
   enabled: true
   endpoint: /graphql
   path: /graphiql
+
+
+
+jwt:
+  secret: "maCleSecreteTrèsLonguePourJWTQueTuDoisChangerEtMettreEnSecurite123!"

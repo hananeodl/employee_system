@@ -43,5 +43,15 @@ public class PayrollServiceImpl implements PayrollService {
     public List<Payroll> getPayrollsByEmployeeId(Long employeeId) {
         return payrollRepository.findByEmployeeId(employeeId);
     }
+
+    @Override
+    public List<Payroll> findAll() {
+        return payrollRepository.findAll();
+    }
+
+    @Override
+    public void deleteByEmployeeId(Long employeeId) {
+        payrollRepository.deleteById(employeeId);
+    }
 }
 

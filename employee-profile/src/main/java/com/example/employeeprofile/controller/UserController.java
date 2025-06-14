@@ -13,19 +13,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    /* Seuls les admins peuvent appeler cet endpoint
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.findAllUsers();
-        return ResponseEntity.ok(users);
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
-*/
+
+    /* Seuls les admins peuvent appeler cet endpoint
+        @PreAuthorize("hasRole('ADMIN')")
+        @GetMapping
+        public ResponseEntity<List<User>> getAllUsers() {
+            List<User> users = userService.findAllUsers();
+            return ResponseEntity.ok(users);
+        }
+    */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {

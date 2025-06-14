@@ -8,8 +8,10 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/hananeodl/ConfigServer/
+          uri: https://github.com/hananeodl/ConfigServer
           default-label: main
           clone-on-start: true
-          search-paths: .
+          search-paths: '{application}.yaml,{application}.yml'
+          force-pull: true
+          strict-host-key-checking: false
 

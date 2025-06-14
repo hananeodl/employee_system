@@ -1,9 +1,10 @@
 ### 1. Ajouter une fiche de paie
-POST http://localhost:8081/api/payroll/
+POST https://localhost:8083/api/payroll/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJFbXBsb3llZVByb2ZpbGVBcHAiLCJzdWIiOiJoYW5hbmUiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTc0OTg1ODk2MywiZXhwIjoxNzQ5ODU5ODYzfQ.nUBaPIYGSM7vcaLetamhsz87fehLOYCpsxQEpok7IZ44Qp83H_tAl0Frlw4VkDU3SXKGdmcyYDyMsL3bfkLqiQ
 
 {
-  "employeeId": 1,
+  "employeeId": 11,
   "baseSalary": 3000.0,
   "bonus": 500.0,
   "deductions": 200.0,
@@ -12,11 +13,12 @@ Content-Type: application/json
 }
 
 ### 2. Ajouter une autre fiche de paie
-POST http://localhost:8081/api/payrolls
+POST https://localhost:8083/api/payroll/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0OTQyNjE0OSwiZXhwIjoxNzQ5NTEyNTQ5fQ.ISK1dQsEeWR12dr2Fs9LjF_kd5kd-db-Wt90yengdJg
 
 {
-  "employeeId": 2,
+  "employeeId": 12,
   "baseSalary": 4000.0,
   "bonus": 800.0,
   "deductions": 300.0,
@@ -24,18 +26,30 @@ Content-Type: application/json
   "paymentDate": "2024-05-25"
 }
 
-### 3. Récupérer les fiches de paie de l'employé 1
-GET http://localhost:8081/api/payrolls/employee/1
+### 3. Récupérer les fiches de paie de l'employé 11
+GET https://localhost:8083/api/payroll/employee/11
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0OTQyNjE0OSwiZXhwIjoxNzQ5NTEyNTQ5fQ.ISK1dQsEeWR12dr2Fs9LjF_kd5kd-db-Wt90yengdJg
 
-### 4. Mettre à jour une fiche de paie (par exemple id = 1)
-PUT http://localhost:8081/api/payrolls/1
+### 4. Mettre à jour une fiche de paie (par exemple id = 11)
+PUT https://localhost:8083/api/payroll/11
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0OTQyNjE0OSwiZXhwIjoxNzQ5NTEyNTQ5fQ.ISK1dQsEeWR12dr2Fs9LjF_kd5kd-db-Wt90yengdJg
 
 {
-  "employeeId": 1,
+  "employeeId": 11,
   "baseSalary": 3200.0,
   "bonus": 600.0,
   "deductions": 250.0,
   "netSalary": 3550.0,
   "paymentDate": "2024-06-01"
 }
+
+### 5. Récupérer les fiches de paie
+GET https://localhost:8083/api/payroll/
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0OTQyNjE0OSwiZXhwIjoxNzQ5NTEyNTQ5fQ.ISK1dQsEeWR12dr2Fs9LjF_kd5kd-db-Wt90yengdJg
+
+
+### 6. supprimer une fiche de paie
+DELETE https://localhost:8083/api/payroll/11
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0OTQyNjE0OSwiZXhwIjoxNzQ5NTEyNTQ5fQ.ISK1dQsEeWR12dr2Fs9LjF_kd5kd-db-Wt90yengdJg
+

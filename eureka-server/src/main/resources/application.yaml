@@ -18,4 +18,3 @@ eureka:
     metadata-map:
       management:
         context-path: /actuator
-

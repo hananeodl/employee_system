@@ -1,8 +1,11 @@
 spring:
-  config:
-    import: optional:configserver:http://localhost:8888
   application:
     name: payroll-service
+  config:
+    import: optional:configserver:http://localhost:8888
+    name: payroll-service
+    tls:
+      enabled: false
   security:
     user:
       name: admin
@@ -31,3 +34,6 @@ eureka:
       defaultZone: https://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
+
+jwt:
+  secret: "maCleSecreteTrèsLonguePourJWTQueTuDoisChangerEtMettreEnSecurite123!"

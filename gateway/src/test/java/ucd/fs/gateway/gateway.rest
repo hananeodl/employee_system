@@ -1,0 +1,7 @@
+### Test via Gateway : Get all payrolls
+GET https://localhost:8443/api/payroll/
+Authorization: Bearer <TOKEN>
+
+### Test via Gateway : Get all absences
+GET https://localhost:8443/api/absences/
+Authorization: Bearer <TOKEN>

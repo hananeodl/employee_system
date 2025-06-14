@@ -1,0 +1,27 @@
+### POST : Créer une absence
+POST https://localhost:8082/api/absences/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0OTQzODE1NSwiZXhwIjoxNzQ5NTI0NTU1fQ.-VogRRh3luZFc8BjahVDfL0i5N8FiLBIAUAYywoesWs
+
+{
+  "employeeId": 11,
+  "startDate": "2025-06-10",
+  "endDate": "2025-06-12",
+  "reason": "Congé annuel"
+}
+
+###
+
+### GET : Récupérer toutes les absences
+GET https://localhost:8082/api/absences/
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0OTQzODE1NSwiZXhwIjoxNzQ5NTI0NTU1fQ.-VogRRh3luZFc8BjahVDfL0i5N8FiLBIAUAYywoesWs
+
+###
+
+### PUT : Approuver une absence par ID
+PUT https://localhost:8082/api/absences/1/approve
+
+###
+
+### GET : Récupérer les absences d'un employé (par ID)
+GET https://localhost:8082/api/absences/employee/1
