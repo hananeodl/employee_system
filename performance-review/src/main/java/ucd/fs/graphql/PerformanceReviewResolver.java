@@ -2,8 +2,10 @@ package ucd.fs.graphql;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import ucd.fs.model.PerformanceReview;
 import ucd.fs.service.PerformanceReviewService;
@@ -17,21 +19,25 @@ public class PerformanceReviewResolver {
     private PerformanceReviewService service;
 
     @QueryMapping
-    public List<PerformanceReview> getAllReviews() {
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public List<PerformanceReview> getAllReviews(@ContextValue(name = "jwt") String jwt) {
         return service.getAllReviews();
     }
 
     @QueryMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public PerformanceReview getReviewById(@Argument Long id) {
         return service.getReviewById(id).orElse(null);
     }
 
     @QueryMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<PerformanceReview> getReviewsByEmployeeId(@Argument Long employeeId) {
         return service.getReviewsByEmployeeId(employeeId);
     }
 
     @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public PerformanceReview createReview(
             @Argument Long employeeId,
             @Argument int score,
@@ -48,6 +54,7 @@ public class PerformanceReviewResolver {
     }
 
     @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Boolean deleteReview(@Argument Long id) {
         service.deleteReview(id);
         return true;

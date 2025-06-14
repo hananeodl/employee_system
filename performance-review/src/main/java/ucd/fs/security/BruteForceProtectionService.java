@@ -1,53 +1,47 @@
 package ucd.fs.security;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.stereotype.Service;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Service
 public class BruteForceProtectionService {
-
     private static final int MAX_ATTEMPTS = 5;
-    private static final long BLOCK_DURATION = 15 * 60; // 15 minutes en secondes
-
-    private final Map<String, Attempt> attempts = new ConcurrentHashMap<>();
+    private static final Duration BLOCK_DURATION = Duration.ofMinutes(15);
+    private final Cache<String, Attempt> attemptsCache = Caffeine.newBuilder()
+            .expireAfterWrite(BLOCK_DURATION)
+            .build();
 
     public void loginFailed(String key) {
-        Attempt attempt = attempts.getOrDefault(key, new Attempt(0, Instant.now().getEpochSecond()));
-        attempt.count++;
-        attempt.lastAttempt = Instant.now().getEpochSecond();
-        attempts.put(key, attempt);
+        Attempt attempt = attemptsCache.get(key, k -> new Attempt(0, Instant.now()));
+        if (attempt != null) {
+            attempt.increment();
+            attemptsCache.put(key, attempt);
+        }
     }
 
     public boolean isBlocked(String key) {
-        Attempt attempt = attempts.get(key);
-        if (attempt == null) {
-            return false;
-        }
-        if (attempt.count >= MAX_ATTEMPTS) {
-            long timeSinceLastAttempt = Instant.now().getEpochSecond() - attempt.lastAttempt;
-            if (timeSinceLastAttempt < BLOCK_DURATION) {
-                return true;
-            } else {
-                attempts.remove(key); // reset après expiration
-            }
-        }
-        return false;
+        Attempt attempt = attemptsCache.getIfPresent(key);
+        return attempt != null && attempt.getCount() >= MAX_ATTEMPTS;
     }
 
     public void loginSucceeded(String key) {
-        attempts.remove(key);
+        attemptsCache.invalidate(key);
     }
 
+    @Getter
+    @AllArgsConstructor
     private static class Attempt {
-        int count;
-        long lastAttempt;
+        private int count;
+        private Instant lastAttempt;
 
-        public Attempt(int count, long lastAttempt) {
-            this.count = count;
-            this.lastAttempt = lastAttempt;
+        public void increment() {
+            this.count++;
+            this.lastAttempt = Instant.now();
         }
     }
 }
-

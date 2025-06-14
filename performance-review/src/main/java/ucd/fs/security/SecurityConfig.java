@@ -2,6 +2,7 @@ package ucd.fs.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,7 +16,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll() // autoriser certains endpoints publics si besoin
+                        .requestMatchers("/graphql").permitAll()
+                        .requestMatchers("/graphiql").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/performance/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/performance/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/performance/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -24,4 +29,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
