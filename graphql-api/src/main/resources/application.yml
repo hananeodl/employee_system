@@ -1,0 +1,33 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: graphql-api
+
+# Feign clients config
+feign:
+  hystrix:
+    enabled: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    root: INFO
+    com.example.graphqlapi: DEBUG
+
+jwt:
+  secret: "maCleSecreteTrèsLonguePourJWTQueTuDoisChangerEtMettreEnSecurite123!"
+  issuer: "EmployeeProfileApp"
+
+services:
+  employee-profile-url: http://localhost:8050
+  absence-management-url: http://localhost:8082
+  payroll-url: http://localhost:8083
+  performance-review-url: http://localhost:8084

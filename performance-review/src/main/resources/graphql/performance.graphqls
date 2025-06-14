@@ -1,0 +1,18 @@
+type PerformanceReview {
+    id: ID!
+    employeeId: ID!
+    score: Int!
+    comments: String
+    reviewDate: String
+}
+
+type Query {
+    getAllReviews: [PerformanceReview]
+    getReviewById(id: ID!): PerformanceReview
+    getReviewsByEmployeeId(employeeId: ID!): [PerformanceReview]
+}
+
+type Mutation {
+    createReview(employeeId: ID!, score: Int!, comments: String, reviewDate: String): PerformanceReview
+    deleteReview(id: ID!): Boolean
+}
