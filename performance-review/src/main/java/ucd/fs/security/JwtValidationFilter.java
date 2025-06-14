@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 
 public class JwtValidationFilter extends OncePerRequestFilter {
 
@@ -36,8 +37,12 @@ public class JwtValidationFilter extends OncePerRequestFilter {
                         .parseClaimsJws(jwt)
                         .getBody();
 
+                if (claims.getExpiration() != null && claims.getExpiration().before(new Date())) {
+                    throw new BadCredentialsException("JWT token expired");
+                }
+
                 String username = claims.get("username", String.class);
-                String role = claims.get("role", String.class);
+                String role = "ROLE_" + claims.get("role", String.class);
 
                 Authentication auth = new UsernamePasswordAuthenticationToken(
                         username, null, Collections.singletonList(new SimpleGrantedAuthority(role))
@@ -55,7 +60,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().equals("/public"); // exemple d'endpoint public si tu en veux
+        return request.getServletPath().equals("/graphql") ||
+                request.getServletPath().equals("/graphiql");
     }
 }
-
