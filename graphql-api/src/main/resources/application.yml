@@ -1,5 +1,5 @@
 server:
-  port: 8085
+  port: 8051
 
 spring:
   application:
@@ -30,4 +30,4 @@ services:
   employee-profile-url: http://localhost:8050
   absence-management-url: http://localhost:8082
   payroll-url: http://localhost:8083
-  performance-review-url: http://localhost:8084
+  performance-review-url: http://localhost:8052
