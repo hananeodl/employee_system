@@ -40,9 +40,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                         .verify(token.substring(7));
 
                 // Ajoutez les informations utilisateur aux headers
-                exchange.getRequest().mutate()
-                        .header("X-User-Id", jwt.getSubject())
-                        .header("X-User-Roles", jwt.getClaim("roles").asString())
+                exchange = exchange.mutate()
+                        .request(exchange.getRequest().mutate()
+                                .header("Authorization", token)
+                                .header("X-User-Id", jwt.getSubject())
+                                .header("X-User-Roles", jwt.getClaim("roles").asString())
+                                .build())
                         .build();
 
                 return chain.filter(exchange);
