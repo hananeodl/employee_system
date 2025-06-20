@@ -2,6 +2,7 @@ package com.example.employeeprofile.controller;
 
 import com.example.employeeprofile.model.User;
 import com.example.employeeprofile.security.SecurityConstants;
+import com.example.employeeprofile.service.PasswordResetService;
 import com.example.employeeprofile.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -27,10 +28,12 @@ public class AuthController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-
-    public AuthController(UserService userService, AuthenticationManager authenticationManager) {
+    private final PasswordResetService passwordResetService;
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, PasswordResetService passwordResetService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.passwordResetService = passwordResetService;
+
     }
 
     //  Endpoint Sign-Up
@@ -162,6 +165,33 @@ public class AuthController {
         } catch (Exception e) {
             log.warn(" Refresh token invalide");
             return ResponseEntity.status(401).body(Map.of("error", "Invalid refresh token"));
+        }
+    }
+    //  Endpoint pour demander un token de réinitialisation
+    @PostMapping("/request-password-reset")
+    public ResponseEntity<?> requestPasswordReset(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        try {
+            String token = passwordResetService.createResetToken(username);
+            // Pour l'exemple, on retourne directement le token.
+            // En prod, on l’enverrait par email.
+            return ResponseEntity.ok(Map.of("resetToken", token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    //  Endpoint pour réinitialiser le mot de passe avec le token
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> body) {
+        String token = body.get("token");
+        String newPassword = body.get("newPassword");
+
+        boolean success = passwordResetService.resetPassword(token, newPassword);
+        if (success) {
+            return ResponseEntity.ok(Map.of("message", "Mot de passe réinitialisé avec succès."));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("error", "Token invalide ou expiré."));
         }
     }
 }
