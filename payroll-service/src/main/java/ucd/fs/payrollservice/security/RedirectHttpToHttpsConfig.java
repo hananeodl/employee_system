@@ -1,4 +1,4 @@
-package ucd.fs.payrollservice.webSecurity;
+package ucd.fs.payrollservice.security;
 
 import org.apache.catalina.connector.Connector;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;

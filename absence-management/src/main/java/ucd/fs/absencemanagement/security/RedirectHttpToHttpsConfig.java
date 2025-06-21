@@ -1,4 +1,4 @@
-package ucd.fs.absencemanagement.webSecurity;
+package ucd.fs.absencemanagement.security;
 
 import org.apache.catalina.connector.Connector;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -14,7 +14,7 @@ public class RedirectHttpToHttpsConfig {
         return server -> {
             Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
             connector.setScheme("http");
-            connector.setPort(8084);
+            connector.setPort(8086);
             connector.setSecure(false);
             connector.setRedirectPort(8082);
             server.addAdditionalTomcatConnectors(connector);

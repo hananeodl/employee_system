@@ -5,6 +5,7 @@ server:
     key-store: classpath:localhost.p12
     key-store-password: changeit
     key-store-type: PKCS12
+    key-alias: secure-localhost
 
 
 eureka:

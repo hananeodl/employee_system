@@ -39,6 +39,27 @@ public class BruteForceProtectionService {
         private int count;
         private Instant lastAttempt;
 
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public Instant getLastAttempt() {
+            return lastAttempt;
+        }
+
+        public void setLastAttempt(Instant lastAttempt) {
+            this.lastAttempt = lastAttempt;
+        }
+
+        public Attempt(int count, Instant lastAttempt) {
+            this.count = count;
+            this.lastAttempt = lastAttempt;
+        }
+
         public void increment() {
             this.count++;
             this.lastAttempt = Instant.now();

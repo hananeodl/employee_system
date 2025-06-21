@@ -9,7 +9,7 @@ import ucd.fs.absencemanagement.service.facade.AbsenceService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/absences/")
+@RequestMapping("/api/absence/")
 public class AbsenceController {
     @Autowired
     private AbsenceService absenceService;
