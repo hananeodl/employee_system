@@ -3,39 +3,75 @@ type Query {
     getPayrolls(employeeId: ID!): [Payroll]
     getAbsences(employeeId: ID!): [Absence]
     getPerformanceReviews(employeeId: ID!): [PerformanceReview]
+    getEmployeeDetails(employeeId: ID!): EmployeeDetails
+}
+
+type Mutation {
+    createUser(
+        username: String!,
+        email: String!,
+        password: String!,
+        role: String!
+    ): User
+
+    createPayroll(
+        employeeId: ID!,
+        baseSalary: Float!,
+        bonus: Float!,
+        deductions: Float!
+    ): Payroll
+
+    createAbsence(
+        employeeId: ID!,
+        startDate: String!,
+        endDate: String!,
+        reason: String!
+    ): Absence
+
+    createPerformanceReview(
+        employeeId: ID!,
+        score: Int!,
+        comments: String
+    ): PerformanceReview
+}
+
+type EmployeeDetails {
+    profile: User
+    payrolls: [Payroll]
+    absences: [Absence]
+    performanceReviews: [PerformanceReview]
 }
 
 type User {
     id: ID!
     username: String!
     email: String!
-    password: String!
     role: String!
 }
 
 type Payroll {
     id: ID!
     employeeId: ID!
-    baseSalary: Float
-    bonus: Float
-    deductions: Float
-    netSalary: Float
+    baseSalary: Float!
+    bonus: Float!
+    deductions: Float!
+    netSalary: Float!
     paymentDate: String
 }
 
 type Absence {
     id: ID!
     employeeId: ID!
-    startDate: String
-    endDate: String
-    reason: String
-    status: String
+    startDate: String!
+    endDate: String!
+    reason: String!
+    status: String!
 }
 
 type PerformanceReview {
     id: ID!
     employeeId: ID!
-    score: Int
+    score: Int!
     comments: String
-    reviewDate: String
+    reviewDate: String!
 }
