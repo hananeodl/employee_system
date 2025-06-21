@@ -1,7 +1,7 @@
 ### POST : Créer une absence
-POST https://localhost:8082/api/absences/
+POST https://localhost:8082/api/absence/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0OTQzODE1NSwiZXhwIjoxNzQ5NTI0NTU1fQ.-VogRRh3luZFc8BjahVDfL0i5N8FiLBIAUAYywoesWs
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJFbXBsb3llZVByb2ZpbGVBcHAiLCJzdWIiOiJoYW5hbmUiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTc1MDQ2NDA4NywiZXhwIjoxNzUwNDY0OTg3fQ.FO48aK7OzRpnY0FD-_DELnGcs-gHX_TLDe9tk49wiptvj1Fo4ZX7Bag9KykijV11mRdar30t1mgIJOmBe3EnIg
 
 {
   "employeeId": 11,

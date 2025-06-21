@@ -1,10 +1,4 @@
-package ucd.fs.gateway.webSecurity;
-
-import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import reactor.netty.http.server.HttpServer;
+package ucd.fs.gateway.security;
 
 //@Configuration
 //public class RedirectHttpToHttpsConfig {
