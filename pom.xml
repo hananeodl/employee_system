@@ -22,6 +22,12 @@
 		<developer/>
 	</developers>
     <modules>
+		<module>absence-management</module>
+		<module>config-server</module>
+		<module>employee-profile</module>
+		<module>eureka-server</module>
+		<module>gateway</module>
+		<module>payroll-service</module>
         <module>performance-review</module>
         <module>graphql-api</module>
     </modules>
