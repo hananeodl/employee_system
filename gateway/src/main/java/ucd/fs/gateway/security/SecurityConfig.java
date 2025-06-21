@@ -31,77 +31,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-
-//@Configuration
-//@EnableWebFluxSecurity
-//public class SecurityConfig {
-//
-//    @Bean
-//    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-//        return http
-//                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-//                .authorizeExchange(exchanges -> exchanges
-//                        .pathMatchers("/api/auth/**","/actuator/**","/employee-profile/graphql" ).permitAll()
-//                        .anyExchange().authenticated()
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public Algorithm jwtAlgorithm(@Value("${jwt.secret}") String secret) {
-//        return Algorithm.HMAC256(secret);
-//    }
-//}
-
-//@Configuration
-//@EnableWebFluxSecurity
-//public class SecurityConfig {
-//
-//    @Bean
-//    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-//        return http
-//                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-//                .authorizeExchange(exchanges -> exchanges
-//                        .pathMatchers("/api/auth/**","/actuator/**","/employee-profile/graphql" ).permitAll()
-//                        .anyExchange().authenticated()
-//                )
-//                .oauth2ResourceServer(oauth2 -> oauth2
-//                        .jwt(jwt -> jwt.jwtDecoder(jwtDecoder()))
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public ReactiveJwtDecoder jwtDecoder() {
-//        return NimbusReactiveJwtDecoder
-//                .withSecretKey(new SecretKeySpec(
-//                        "maCleSecreteTrèsLonguePourJWTQueTuDoisChangerEtMettreEnSecurite123!".getBytes(),
-//                        "HS256"))
-//                .build();
-//    }
-//}
-
-
-//@Configuration
-//@EnableWebFluxSecurity
-//public class SecurityConfig {
-//
-//    @Bean
-//    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-//        return http
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeExchange(exchanges -> exchanges
-//                        .pathMatchers(
-//                                "/api/auth/**",
-//                                "/actuator/**",
-//                                "/employee-profile/graphql"
-//                        ).permitAll()
-//                        .anyExchange().authenticated()
-//                )
-//
-//                .build();
-//    }
-//}
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.config.WebFluxConfigurerComposite;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -116,5 +48,18 @@ public class SecurityConfig {
                         .anyExchange().permitAll()
                 )
                 .build();
+    }
+
+    @Bean
+    public WebFluxConfigurer corsConfigurer() {
+        return new WebFluxConfigurerComposite() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*");
+            }
+        };
     }
 }

@@ -1,6 +1,7 @@
 package com.example.employeeprofile.controller;
 
 import com.example.employeeprofile.model.User;
+import com.example.employeeprofile.security.JwtGeneratorFilter;
 import com.example.employeeprofile.security.SecurityConstants;
 import com.example.employeeprofile.service.PasswordResetService;
 import com.example.employeeprofile.service.UserService;
@@ -8,6 +9,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
+//@Slf4j
 @RestController
 @RequestMapping("/app")
 public class AuthController {
@@ -35,6 +38,8 @@ public class AuthController {
         this.passwordResetService = passwordResetService;
 
     }
+
+    private static final Logger log = LoggerFactory.getLogger(JwtGeneratorFilter.class);
 
     //  Endpoint Sign-Up
     @PostMapping("/sign-up")
