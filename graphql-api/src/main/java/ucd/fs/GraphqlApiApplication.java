@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients(basePackages = "ucd.fs.client")
-public class GraphqlApiMain {
+public class GraphqlApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(GraphqlApiMain.class, args);
+        SpringApplication.run(GraphqlApiApplication.class, args);
     }
 }
