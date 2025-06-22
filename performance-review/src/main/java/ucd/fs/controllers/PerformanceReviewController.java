@@ -2,6 +2,7 @@ package ucd.fs.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ucd.fs.model.PerformanceReview;
@@ -39,6 +40,7 @@ public class PerformanceReviewController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PerformanceReview>> getAllReviews() {
         return ResponseEntity.ok(service.getAllReviews());
     }

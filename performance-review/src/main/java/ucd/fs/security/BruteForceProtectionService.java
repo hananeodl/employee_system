@@ -34,7 +34,6 @@ public class BruteForceProtectionService {
     }
 
     @Getter
-    @AllArgsConstructor
     private static class Attempt {
         private int count;
         private Instant lastAttempt;
