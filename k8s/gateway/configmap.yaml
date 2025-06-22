@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-config
+data:
+  application.yaml: |
+    server:
+      port: 8443
+      ssl:
+        enabled: true
+        key-store: "/app/certs/localhost.p12"
+        key-store-password: "${SERVER_SSL_KEY_STORE_PASSWORD}"
+        key-store-type: PKCS12
+        key-alias: secure-localhost
+        trust-store: "/app/certs/truststore.p12"
+        trust-store-type: PKCS12
+      http2:
+        enabled: true
+    spring:
+      application:
+        name: gateway
+      cloud:
+        gateway:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          routes:
+            - id: payroll-service
+              uri: lb://payroll-service
+              predicates:
+                - Path=/api/payroll/**
+            - id: absence-management
+              uri: lb://absence-management
+              predicates:
+                - Path=/api/absence/**
+            - id: employee-profile
+              uri: lb://employee-profile
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - RewritePath=/api/auth/(?<segment>.*), /app/${segment}
+    eureka:
+      client:
+        service-url:
+          defaultZone: https://eureka-server:8761/eureka/
+        register-with-eureka: true
+        fetch-registry: true
+        tls:
+          enabled: true
+          trust-store: /etc/secrets/eureka/localhost.p12
+          trust-store-password: changeit
+      instance:
+        prefer-ip-address: true
+        secure-port-enabled: true
+        secure-port: 8443
+        

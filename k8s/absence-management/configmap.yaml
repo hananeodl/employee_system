@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: absence-config
+data:
+  application.yaml: |
+    server:
+      port: 8082
+      ssl:
+        enabled: true
+        key-store: "/app/certs/localhost.p12"
+        key-store-type: PKCS12
+        trust-store-type: PKCS12
+        key-alias: "secure-localhost"
+        trust-store: "/app/certs/truststore.p12"
+      http2:
+        enabled: true
+    spring:
+      application:
+        name: absence-management
+      datasource:
+        url: jdbc:mysql://mysql-absence-service:3306/absence_db
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: true
+        database-platform: org.hibernate.dialect.MySQLDialect
+    eureka:
+      client:
+        service-url:
+          defaultZone: https://eureka-server:8761/eureka/
+      instance:
+        prefer-ip-address: true
+        secure-port-enabled: true
+        secure-port: 8082

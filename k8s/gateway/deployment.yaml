@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: hananeoudaali/gateway:latest
+          ports:
+            - containerPort: 8443
+          env:
+            - name: SERVER_SSL_KEY_STORE
+              value: "/app/certs/localhost.p12"
+            - name: SERVER_SSL_TRUST_STORE
+              value: "/app/certs/truststore.p12"
+            - name: SERVER_SSL_KEY_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gateway-secrets
+                  key: ssl-key-password
+            - name: SERVER_SSL_TRUST_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gateway-secrets
+                  key: ssl-trust-password
+            - name: EUREKA_CLIENT_TLS_TRUST_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gateway-secrets
+                  key: eureka-trust-password
+            - name: SPRING_CONFIG_IMPORT
+              value: "optional:configserver:http://config-server:8888,file:/config/application.yaml"
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: https://eureka-server:8761/eureka/
+            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+              value: "true"
+            - name: EUREKA_INSTANCE_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SERVER_SSL_KEY_STORE_TYPE
+              value: PKCS12
+            - name: SERVER_SSL_KEY_ALIAS
+              value: secure-localhost
+            - name: SERVER_PORT
+              value: "8443"
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          volumeMounts:
+            - name: ssl-secrets
+              mountPath: "/app/certs"
+              readOnly: true
+            - name: eureka-secrets
+              mountPath: "/etc/secrets/eureka"
+              readOnly: true
+            - name: config-volume
+              mountPath: "/config"
+      volumes:
+        - name: ssl-secrets
+          secret:
+            secretName: gateway-secrets
+            items:
+              - key: ssl-key-store
+                path: localhost.p12
+              - key: ssl-trust-store
+                path: truststore.p12
+        - name: eureka-secrets
+          secret:
+            secretName: gateway-secrets
+            items:
+              - key: eureka-trust-store
+                path: localhost.p12
+        - name: config-volume
+          configMap:
+            name: gateway-config

@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: absence-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: absence-management
+  template:
+    metadata:
+      labels:
+        app: absence-management
+    spec:
+      containers:
+        - name: absence-management
+          image: hananeoudaali/absence-management:latest
+          ports:
+            - containerPort: 8082
+          env:
+              - name: SPRING_CONFIG_IMPORT
+                value: "optional:configserver:http://config-server:8888,file:/config/application.yaml"
+              - name: SPRING_DATASOURCE_USERNAME
+                value: "root"
+              - name: SPRING_DATASOURCE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: absence-secrets
+                    key: db-password
+              - name: SERVER_SSL_KEY_STORE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: absence-secrets
+                    key: ssl-key-store-password
+              - name: SERVER_SSL_TRUST_STORE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: absence-secrets
+                    key: ssl-trust-store-password
+              - name: SPRING_SECURITY_USER_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: absence-secrets
+                    key: admin-password
+          volumeMounts:
+            - name: ssl-secrets
+              mountPath: "/app/certs"
+              subPath: localhost.p12
+            - name: config-volume
+              mountPath: "/config"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8082
+              scheme: HTTPS
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8082
+              scheme: HTTPS
+            initialDelaySeconds: 30
+            periodSeconds: 5
+      volumes:
+        - name: ssl-secrets
+          secret:
+            secretName: absence-secrets
+            items:
+              - key: ssl-key-store
+                path: localhost.p12
+              - key: ssl-trust-store
+                path: truststore.p12
+        - name: config-volume
+          configMap:
+            name: absence-config

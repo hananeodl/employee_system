@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server
+  labels:
+    app: config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      labels:
+        app: config-server
+    spec:
+      containers:
+        - name: config-server
+          image: hananeoudaali/config-server:latest
+          ports:
+            - containerPort: 8888
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: "config-server"
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-server:8761/eureka
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
+              value: https://github.com/hananeodl/ConfigServer
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_CLONE_ON_START
+              value: "true"
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL
+              value: "main"
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCH_PATHS
+              value: "{application}.yaml,{application}.yml"
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_FORCE_PULL
+              value: "true"
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_STRICT_HOST_KEY_CHECKING
+              value: "false"
+

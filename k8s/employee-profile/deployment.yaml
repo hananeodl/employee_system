@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-profile
+  labels:
+    app: employee-profile
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee-profile
+  template:
+    metadata:
+      labels:
+        app: employee-profile
+    spec:
+      containers:
+        - name: employee-profile
+          image: hananeoudaali/employee-profile:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8050
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: https://eureka-server:8761/eureka/
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://config-server:8888
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql:3306/absence_db
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+              value: "true"
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: "true"
+            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+              value: "true"
+            - name: EUREKA_INSTANCE_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SPRING_CONFIG_IMPORT
+              value: "optional:configserver:http://config-server:8888,file:/config/application.yaml"
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: employee-profile-secrets
+                  key: db-password
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: employee-profile-secrets
+                  key: jwt-secret
+          volumeMounts:
+            - name: config-volume
+              mountPath: "/config"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8050
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8050
+            initialDelaySeconds: 30
+            periodSeconds: 5
+      volumes:
+        - name: config-volume
+          configMap:
+            name: employee-profile-config

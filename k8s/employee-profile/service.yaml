@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee-profile
+spec:
+  selector:
+    app: employee-profile
+  ports:
+    - protocol: TCP
+      port: 8050
+      targetPort: 8050
+  type: ClusterIP

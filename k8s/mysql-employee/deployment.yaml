@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-employee
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-employee
+  template:
+    metadata:
+      labels:
+        app: mysql-employee
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: ""
+            - name: MYSQL_DATABASE
+              value: "employee"
+          ports:
+            - containerPort: 3306
