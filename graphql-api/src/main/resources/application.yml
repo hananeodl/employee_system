@@ -15,9 +15,6 @@ server:
     enabled: true
   tls:
     enabled: true
-  security:
-    basic:
-      enabled: false
 
 spring:
   application:
