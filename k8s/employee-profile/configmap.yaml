@@ -10,7 +10,7 @@ data:
       application:
         name: employee-profile
       datasource:
-        url: jdbc:mysql://mysql-service:3306/employee?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: jdbc:mysql://mysql-employee:3306/employee?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         driver-class-name: com.mysql.cj.jdbc.Driver
       jpa:

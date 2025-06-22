@@ -33,12 +33,12 @@ spec:
             - name: SERVER_SSL_ENABLED
               value: "true"
             - name: SERVER_SSL_KEY_STORE
-              value: "/etc/ssl/certs/localhost.p12"
+              value: "/app/certs/localhost.p12"
             - name: SERVER_SSL_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: eureka-ssl-secret
-                  key: key-store-password
+                  key: ssl-key-password
             - name: SERVER_SSL_KEY_STORE_TYPE
               value: "PKCS12"
             - name: SERVER_SSL_KEY_ALIAS
