@@ -30,6 +30,12 @@ spring:
     redis:
       host: localhost
       port: 6379
+  graphql:
+    schema:
+      printer:
+        enabled: true
+    graphiql:
+      enabled: true
 
 
 feign:

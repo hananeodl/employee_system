@@ -18,8 +18,6 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final String jwtSecret = "maCleSecreteTrèsLonguePourJWTQueTuDoisChangerEtMettreEnSecurite123!";
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -30,7 +28,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/graphql").authenticated()
                         .requestMatchers("/graphiql", "/playground").permitAll()
                         .anyRequest().denyAll())
-                .addFilterBefore(new JwtAuthFilter(jwtSecret), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new RateLimiterFilter(), JwtAuthFilter.class);
 
         return http.build();
