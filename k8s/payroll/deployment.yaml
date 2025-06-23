@@ -14,42 +14,23 @@ spec:
     spec:
       containers:
         - name: payroll-service
-          image: your-registry/payroll-service:latest
+          image: hananeoudaali/payroll-service:latest
           ports:
             - containerPort: 8083
+          envFrom:
+            - configMapRef:
+                name: payroll-config
+            - secretRef:
+                name: payroll-secrets
           volumeMounts:
             - name: ssl-secrets
-              mountPath: "/app/certs"  # Doit matcher le Dockerfile
-          env:
-            - name: SERVER_SSL_KEY_STORE
-              value: "/app/certs/localhost.p12"
-            - name: SERVER_SSL_TRUST_STORE
-              value: "/app/certs/truststore.p12"
-            - name: SERVER_SSL_KEY_STORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: payroll-secrets
-                  key: ssl-key-password
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: payroll-secrets
-                  key: jwt-secret
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: ""  # Mot de passe vide (ou utilisez un Secret)
-          resources:
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
-            requests:
-              cpu: "200m"
-              memory: "256Mi"
-          livenessProbe:
+              mountPath: "/app/certs"
+          readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8083
-              scheme: HTTPS
-            initialDelaySeconds: 60
+              scheme: HTTP
+            initialDelaySeconds: 45
       volumes:
         - name: ssl-secrets
           secret:

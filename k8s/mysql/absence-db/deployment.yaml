@@ -16,11 +16,10 @@ spec:
         - name: mysql
           image: mysql:8.0
           env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "1"  # Autorise explicitement le mot de passe vide
             - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: absence-secrets
-                  key: db-password
+              value: ""
             - name: MYSQL_DATABASE
               value: "absence_db"
           ports:

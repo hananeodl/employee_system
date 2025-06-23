@@ -4,6 +4,8 @@ metadata:
   name: mysql-payroll
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: mysql-payroll
@@ -16,11 +18,10 @@ spec:
         - name: mysql
           image: mysql:8.0
           env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "1"
             - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: payroll-secrets
-                  key: db-password
+              value: ""
             - name: MYSQL_DATABASE
               value: "payroll_db"
           ports:
@@ -28,6 +29,10 @@ spec:
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
       volumes:
         - name: mysql-data
           persistentVolumeClaim:

@@ -24,6 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/payroll/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/payroll/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/payroll/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/payroll/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

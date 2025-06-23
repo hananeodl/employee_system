@@ -33,6 +33,8 @@ public class AbsenceController {
     public ResponseEntity<List<Absence>> getAbsencesByEmployee(@PathVariable Long employeeId) {
         return ResponseEntity.ok(absenceService.getAbsencesByEmployeeId(employeeId));
     }
+
+
 }
 
 

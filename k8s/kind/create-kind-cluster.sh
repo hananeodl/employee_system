@@ -1,0 +1,1 @@
+kind create cluster --name employee-system --config kind-config.yaml

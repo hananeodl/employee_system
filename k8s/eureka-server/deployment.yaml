@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,59 +19,33 @@ spec:
           ports:
             - containerPort: 8761
           env:
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "false"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "false"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_INSTANCE_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
             - name: SERVER_SSL_ENABLED
               value: "true"
             - name: SERVER_SSL_KEY_STORE
               value: "/app/certs/localhost.p12"
             - name: SERVER_SSL_KEY_STORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: eureka-ssl-secret
-                  key: ssl-key-password
+              value: "changeit"
             - name: SERVER_SSL_KEY_STORE_TYPE
               value: "PKCS12"
-            - name: SERVER_SSL_KEY_ALIAS
-              value: "secure-localhost"
-            - name: EUREKA_SERVER_RESPONSE_CACHE_CONTROL
-              value: "no-cache"
-            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
-              value: "true"
           volumeMounts:
             - name: ssl-secret
-              mountPath: "/etc/ssl/certs"
+              mountPath: "/app/certs"
               readOnly: true
-          resources:
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
-            requests:
-              cpu: "200m"
-              memory: "256Mi"
           livenessProbe:
             httpGet:
               path: /actuator/health
               port: 8761
-              scheme: HTTPS
-            initialDelaySeconds: 60
-            periodSeconds: 10
+              scheme: HTTP
+            initialDelaySeconds: 120
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /actuator/info
               port: 8761
-              scheme: HTTPS
-            initialDelaySeconds: 30
-            periodSeconds: 5
+              scheme: HTTP
       volumes:
         - name: ssl-secret
           secret:
             secretName: eureka-ssl-secret
+            items:
+              - key: localhost.p12
+                path: localhost.p12
