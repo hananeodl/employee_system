@@ -1,15 +1,23 @@
 package ucd.fs.graphql;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+import ucd.fs.client.PerformanceReviewClient;
 import ucd.fs.model.*;
-
 import java.time.LocalDate;
 import java.util.Date;
 
 @Component
 public class MutationResolver implements GraphQLMutationResolver {
 
+    private final PerformanceReviewClient performanceReviewClient;
+
+    public MutationResolver(PerformanceReviewClient performanceReviewClient) {
+        this.performanceReviewClient = performanceReviewClient;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     public User createUser(String username, String email, String password, String role) {
         User user = new User();
         user.setUsername(username);
@@ -19,7 +27,8 @@ public class MutationResolver implements GraphQLMutationResolver {
         return user;
     }
 
-    public Payroll createPayroll(Long employeeId, Double baseSalary, Double bonus, Double deductions,  Date paymentDate) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public Payroll createPayroll(Long employeeId, Double baseSalary, Double bonus, Double deductions, Date paymentDate) {
         Payroll payroll = new Payroll();
         payroll.setEmployeeId(employeeId);
         payroll.setBaseSalary(baseSalary);
@@ -30,6 +39,7 @@ public class MutationResolver implements GraphQLMutationResolver {
         return payroll;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Absence createAbsence(Long employeeId, String startDate, String endDate, String reason, String status) {
         Absence absence = new Absence();
         absence.setEmployeeId(employeeId);
@@ -40,12 +50,19 @@ public class MutationResolver implements GraphQLMutationResolver {
         return absence;
     }
 
-    public PerformanceReview createPerformanceReview(Long employeeId, int score, String comments, LocalDate reviewDate) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public PerformanceReview createPerformanceReview(Long employeeId, int score, String comments, String reviewDate) {
         PerformanceReview performanceReview = new PerformanceReview();
         performanceReview.setEmployeeId(employeeId);
         performanceReview.setScore(score);
         performanceReview.setComments(comments);
-        performanceReview.setReviewDate(reviewDate);
+        performanceReview.setReviewDate(LocalDate.parse(reviewDate));
         return performanceReview;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public Boolean deletePerformanceReview(Long id) {
+        performanceReviewClient.deleteReview(id);
+        return true;
     }
 }
