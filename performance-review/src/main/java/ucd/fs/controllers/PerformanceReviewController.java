@@ -29,18 +29,12 @@ public class PerformanceReviewController {
             return ResponseEntity.status(429).body("Trop de tentatives. Réessayez plus tard.");
         }
 
-        try {
-            PerformanceReview savedReview = service.saveReview(review);
-            bruteForceProtectionService.loginSucceeded(username);
-            return ResponseEntity.ok(savedReview);
-        } catch (Exception e) {
-            bruteForceProtectionService.loginFailed(username);
-            return ResponseEntity.badRequest().body("Erreur lors de la création de la review : " + e.getMessage());
-        }
+        PerformanceReview savedReview = service.saveReview(review);
+        bruteForceProtectionService.loginSucceeded(username);
+        return ResponseEntity.ok(savedReview);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PerformanceReview>> getAllReviews() {
         return ResponseEntity.ok(service.getAllReviews());
     }

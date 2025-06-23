@@ -10,7 +10,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 public class SecurityConfig {
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -18,12 +17,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/graphql").permitAll()
                         .requestMatchers("/graphiql").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/performance/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/performance/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/performance/**").hasRole("ADMIN")
+                        .requestMatchers(jakarta.ws.rs.HttpMethod.GET, "/api/performance/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(jakarta.ws.rs.HttpMethod.POST, "/api/performance/**").hasRole("ADMIN")
+                        .requestMatchers(jakarta.ws.rs.HttpMethod.DELETE, "/api/performance/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .addFilterBefore(new JwtValidationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
